@@ -4,6 +4,7 @@
   "private": true,
   "description": "Chrome extension: av.by prices in USD (NBRB rate)",
   "scripts": {
+    "build:firefox": "node scripts/build-firefox.mjs",
     "lint": "eslint .",
     "test": "node --test test/*.mjs",
     "format": "prettier --write \"**/*.{js,mjs,json,md,css}\"",

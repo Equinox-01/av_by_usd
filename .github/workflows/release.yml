@@ -39,13 +39,18 @@ jobs:
       - name: Tests
         run: npm test
 
-      - name: Build extension archive
-        run: zip -r "${{ github.ref_name }}.zip" src manifest.json
+      - name: Build extension archives (Chrome + Firefox AMO)
+        run: |
+          npm run build:firefox
+          zip -r "${{ github.ref_name }}-chrome.zip" src manifest.json
+          (cd dist/firefox && zip -r "../../${{ github.ref_name }}-firefox.zip" .)
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ github.ref_name }}.zip
+          files: |
+            ${{ github.ref_name }}-chrome.zip
+            ${{ github.ref_name }}-firefox.zip
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

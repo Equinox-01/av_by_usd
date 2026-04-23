@@ -36,3 +36,6 @@ jobs:
 
       - name: Tests
         run: npm test
+
+      - name: Firefox build (AMO layout)
+        run: npm run build:firefox

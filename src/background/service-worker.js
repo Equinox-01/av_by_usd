@@ -3,7 +3,11 @@
  */
 "use strict";
 
-importScripts(chrome.runtime.getURL("src/shared/messages.js"));
+/** Same payload as src/shared/messages.js (content scripts load that file). */
+(function (g) {
+  "use strict";
+  g.AvByUsdMessageType = Object.freeze({ GET_RATE: "GET_RATE" });
+})(typeof globalThis !== "undefined" ? globalThis : self);
 
 const NBRB_USD_URL = "https://api.nbrb.by/exrates/rates/USD?parammode=2";
 const ALARM_NAME = "avbyusd-refresh-nbrb";

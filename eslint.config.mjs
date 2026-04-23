@@ -7,7 +7,15 @@ export default [
   js.configs.recommended,
   eslintConfigPrettier,
   {
-    ignores: ["node_modules/**"],
+    ignores: ["node_modules/**", "dist/**"],
+  },
+  {
+    files: ["scripts/**/*.mjs"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "module",
+      globals: { ...globals.node },
+    },
   },
   {
     files: ["src/**/*.js"],
@@ -28,7 +36,6 @@ export default [
     files: ["src/background/**/*.js"],
     languageOptions: {
       globals: {
-        importScripts: "readonly",
         AvByUsdMessageType: "readonly",
       },
     },
