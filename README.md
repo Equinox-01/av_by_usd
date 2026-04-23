@@ -26,6 +26,8 @@ npm run format:check
 npm run format
 ```
 
+On **push** and **pull requests** to `main` / `master`, [GitHub Actions](.github/workflows/ci.yml) runs `npm ci`, **ESLint**, **Prettier** (`format:check`), and **`npm test`**.
+
 ### Layout
 
 | Path                               | Role                                                                            |
