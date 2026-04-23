@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "av.by USD (NBRB rate)",
+  "version": "1.0.0",
+  "description": "Shows av.by prices in US dollars at the National Bank of Belarus official USD rate.",
+  "permissions": ["storage", "alarms"],
+  "host_permissions": ["https://api.nbrb.by/*", "https://*.av.by/*"],
+  "background": {
+    "service_worker": "src/background/service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.av.by/*"],
+      "js": ["src/shared/messages.js", "src/rate.js", "src/content/index.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
