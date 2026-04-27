@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy — av.by USD (NBRB rate)</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f8f9fa;
+        --text: #1a1a1a;
+        --muted: #6b6b6b;
+        --border: #e0e0e0;
+        --active: #1a1a1a;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #121212;
+          --text: #e8e8e8;
+          --muted: #9a9a9a;
+          --border: #333;
+          --active: #e8e8e8;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        line-height: 1.5;
+        max-width: 36rem;
+        margin: 0 auto;
+        padding: 1.25rem 1rem 2rem;
+        background: var(--bg);
+        color: var(--text);
+      }
+      h1 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0 0 0.75rem;
+      }
+      p {
+        margin: 0.65rem 0;
+        font-size: 0.95rem;
+      }
+      a {
+        color: inherit;
+      }
+      .bar {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.88rem;
+        color: var(--muted);
+      }
+      .bar button {
+        font: inherit;
+        padding: 0.2rem 0.55rem;
+        border: 1px solid var(--border);
+        border-radius: 0.25rem;
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+      }
+      .bar button[aria-pressed="true"] {
+        border-color: var(--active);
+        font-weight: 600;
+      }
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bar" role="group" aria-label="Language">
+      <span id="label-lang">Language:</span>
+      <button type="button" id="btn-en" aria-pressed="true">English</button>
+      <button type="button" id="btn-ru" aria-pressed="false">Русский</button>
+    </div>
+
+    <article id="panel-en" lang="en" aria-labelledby="h-en">
+      <h1 id="h-en">Privacy policy</h1>
+      <p>
+        <strong>av.by USD (NBRB rate)</strong> shows listing prices on
+        <a href="https://av.by/">av.by</a> in USD using the official NBRB rate
+        (<a href="https://api.nbrb.by/">api.nbrb.by</a>).
+      </p>
+      <p>
+        We <strong>do not</strong> collect or send personal data to the developer. The rate is saved
+        locally; price text is updated in your browser. Use the store listing for support contact.
+      </p>
+    </article>
+
+    <article id="panel-ru" lang="ru" hidden aria-labelledby="h-ru">
+      <h1 id="h-ru">Политика конфиденциальности</h1>
+      <p>
+        Расширение <strong>av.by USD (NBRB rate)</strong> показывает на
+        <a href="https://av.by/">av.by</a> ориентир в USD по курсу NBRB
+        (<a href="https://api.nbrb.by/">api.nbrb.by</a>).
+      </p>
+      <p>
+        Персональные данные <strong>не собираем</strong> и разработчику <strong>не передаём</strong>. Курс
+        хранится локально, пересчёт цен — в браузере. Контакты — в карточке расширения в магазине.
+      </p>
+    </article>
+
+    <script>
+      (function () {
+        const en = document.getElementById("panel-en");
+        const ru = document.getElementById("panel-ru");
+        const btnEn = document.getElementById("btn-en");
+        const btnRu = document.getElementById("btn-ru");
+        const labelLang = document.getElementById("label-lang");
+        const titles = { en: "Privacy — av.by USD (NBRB rate)", ru: "Конфиденциальность — av.by USD" };
+
+        function apply(lang) {
+          const isRu = lang === "ru";
+          en.hidden = isRu;
+          ru.hidden = !isRu;
+          btnEn.setAttribute("aria-pressed", (!isRu).toString());
+          btnRu.setAttribute("aria-pressed", isRu.toString());
+          document.documentElement.lang = isRu ? "ru" : "en";
+          document.title = titles[isRu ? "ru" : "en"];
+          labelLang.textContent = isRu ? "Язык:" : "Language:";
+          if (history.replaceState) {
+            history.replaceState(null, "", isRu ? "#ru" : "#en");
+          } else {
+            location.hash = isRu ? "ru" : "en";
+          }
+          try {
+            localStorage.setItem("privacy-lang", isRu ? "ru" : "en");
+          } catch (_) {}
+        }
+
+        function initFromUrlOrStorage() {
+          const h = (location.hash || "").slice(1).toLowerCase();
+          if (h === "ru" || h === "en") return h;
+          try {
+            const s = localStorage.getItem("privacy-lang");
+            if (s === "ru" || s === "en") return s;
+          } catch (_) {}
+          if (/^ru\b/i.test(navigator.language || "")) return "ru";
+          return "en";
+        }
+
+        btnEn.addEventListener("click", function () {
+          apply("en");
+        });
+        btnRu.addEventListener("click", function () {
+          apply("ru");
+        });
+        apply(initFromUrlOrStorage());
+        window.addEventListener("hashchange", function () {
+          const h = (location.hash || "").slice(1).toLowerCase();
+          if (h === "ru" || h === "en") apply(h);
+        });
+      })();
+    </script>
+  </body>
+</html>
